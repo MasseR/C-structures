@@ -1,6 +1,7 @@
 #include <cgreen.h>
 #include <string.h>
 #include "stack.h"
+#include "heap.h"
 
 inline int stack_comp(void *a, void *b)
 {
@@ -170,10 +171,40 @@ TestSuite *stack_suite()
     return suite;
 }
 
+void test_heap_new(void)
+{
+    heap_t __attribute__((__unused__))heap = heap_new(5);
+}
+
+void test_heap_new_has_correct_size(void)
+{
+    heap_t heap = heap_new(5);
+    assert_equal(heap->size, 5);
+}
+
+void test_heap_new_has_n_null_nodes(void)
+{
+    size_t s = 5;
+    int i;
+    heap_t heap = heap_new(s);
+    for(i = 0; i < s; i++)
+	assert_equal(heap->tree[i], NULL);
+}
+
+TestSuite *heap_suite()
+{
+    TestSuite *suite = create_test_suite();
+    add_test(suite, test_heap_new);
+    add_test(suite, test_heap_new_has_correct_size);
+    add_test(suite, test_heap_new_has_n_null_nodes);
+    return suite;
+}
+
 int main(int argc, const char *argv[])
 {
     TestSuite *suite = create_test_suite();
     add_suite(suite, stack_suite());
+    add_suite(suite, heap_suite());
 
     if(argc > 1)
     {
