@@ -2,8 +2,18 @@
 #include "heap.h"
 
 #define HEAP_SIZE sizeof(struct heap)
-#define LEFT(k) (2*(k))
+#define LEFT(k) (2*((k)+1))-1
 #define RIGHT(k) LEFT(k)+1
+#define PARENT(k) (((k)+1)>>1)-1
+
+static heap_t swap(heap_t heap, int k, int l)
+{
+    void *temp = heap->tree[k];
+    heap->tree[k] = heap->tree[l];
+    heap->tree[l] = temp;
+
+    return heap;
+}
 
 heap_t heap_new(size_t size, cmp_t cmp)
 {
@@ -23,7 +33,17 @@ heap_t heap_new(size_t size, cmp_t cmp)
 heap_t heap_insert(heap_t heap, void *node)
 {
     assert(heap != NULL);
-    heap->tree[0] = node;
+    int i = 0;
+
+    /* Find the first NULL */
+    for(i = 0; heap->tree[i] != NULL; i++)
+    {}
+    heap->tree[i] = node;
+    while(i > 0 && heap->cmp(heap->tree[i], heap->tree[PARENT(i)]))
+    {
+	swap(heap, i, PARENT(i));
+	i = PARENT(i);
+    }
 
     return heap;
 }

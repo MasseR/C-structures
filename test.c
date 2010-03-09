@@ -213,6 +213,52 @@ void test_heap_insert_1(void)
     assert_equal(heap->tree[0], &node);
 }
 
+void test_heap_insert_2(void)
+{
+    int a = 3, b = 2;
+    heap_t heap = heap_new(5, &heap_comp);
+    heap_insert(heap, &a);
+    heap_insert(heap, &b);
+    assert_equal(heap->tree[0], &b);
+    assert_equal(heap->tree[1], &a);
+}
+
+void test_heap_insert_3(void)
+{
+    int a = 3, b = 2, c = 1;
+    heap_t heap = heap_new(5, &heap_comp);
+    heap_insert(heap, &a);
+    heap_insert(heap, &b);
+    heap_insert(heap, &c);
+    assert_equal(heap->tree[0], &c); // 1
+    assert_equal(heap->tree[1], &a); // 3
+    assert_equal(heap->tree[2], &b); // 2
+}
+
+void test_heap_insert_4(void)
+{
+    int a = 3, b = 2, c = 1, d = 0;
+    heap_t heap = heap_new(5, &heap_comp);
+    heap_insert(heap, &a);
+    heap_insert(heap, &b);
+    heap_insert(heap, &c);
+    heap_insert(heap, &d);
+    assert_equal(heap->tree[0], &d);
+    assert_equal(heap->tree[1], &c);
+    assert_equal(heap->tree[2], &b);
+    assert_equal(heap->tree[3], &a);
+}
+
+void test_heap_insert_4_in_correct_order(void)
+{
+    int a = 3, b = 2, c = 1, d = 0;
+    heap_t heap = heap_new(5, &heap_comp);
+    heap_insert(heap, &d);
+    heap_insert(heap, &c);
+    heap_insert(heap, &b);
+    heap_insert(heap, &a);
+}
+
 TestSuite *heap_suite()
 {
     TestSuite *suite = create_test_suite();
@@ -221,6 +267,10 @@ TestSuite *heap_suite()
     add_test(suite, test_heap_new_has_correct_cmp);
     add_test(suite, test_heap_new_has_n_null_nodes);
     add_test(suite, test_heap_insert_1);
+    add_test(suite, test_heap_insert_2);
+    add_test(suite, test_heap_insert_3);
+    add_test(suite, test_heap_insert_4);
+    add_test(suite, test_heap_insert_4_in_correct_order);
     return suite;
 }
 
