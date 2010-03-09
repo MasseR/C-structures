@@ -132,3 +132,9 @@ heap_t heap_remove(heap_t heap)
 
     return heap;
 }
+
+void *heap_peek(heap_t heap)
+{
+    assert(heap != NULL);
+    return heap->tree[0];
+}

@@ -351,6 +351,25 @@ void test_heap_deleting_decreases_nodes(void)
     assert_equal(heap->nodes, 4);
 }
 
+void test_heap_insert_1_peek(void)
+{
+    int a = 5;
+    heap_t heap = heap_new(5, &heap_comp);
+    heap_insert(heap, &a);
+
+    assert_equal(*(int*)heap_peek(heap), 5);
+}
+
+void test_heap_insert_2_peek(void)
+{
+    int a = 5, b = 1;
+    heap_t heap = heap_new(5, &heap_comp);
+    heap_insert(heap, &a);
+    heap_insert(heap, &b);
+
+    assert_equal(*(int*)heap_peek(heap), 1);
+}
+
 TestSuite *heap_suite()
 {
     TestSuite *suite = create_test_suite();
@@ -372,6 +391,8 @@ TestSuite *heap_suite()
     add_test(suite, test_heap_delete_size_5);
     add_test(suite, test_heap_delete_from_right);
     add_test(suite, test_heap_deleting_decreases_nodes);
+    add_test(suite, test_heap_insert_1_peek);
+    add_test(suite, test_heap_insert_2_peek);
     return suite;
 }
 
