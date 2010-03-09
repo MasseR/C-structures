@@ -3,6 +3,11 @@
 #include "stack.h"
 #include "heap.h"
 
+inline int heap_comp(void *a, void *b)
+{
+    return *(int*)a <= *(int*)b;
+}
+
 inline int stack_comp(void *a, void *b)
 {
     return !strcmp((char*)a, (char*)b);
@@ -173,22 +178,39 @@ TestSuite *stack_suite()
 
 void test_heap_new(void)
 {
-    heap_t __attribute__((__unused__))heap = heap_new(5);
+    heap_t __attribute__((__unused__))heap = heap_new(5, &heap_comp);
 }
 
 void test_heap_new_has_correct_size(void)
 {
-    heap_t heap = heap_new(5);
+    heap_t heap = heap_new(5, NULL);
     assert_equal(heap->size, 5);
+}
+
+void test_heap_new_has_correct_cmp(void)
+{
+    int a = 5, b = 6;
+    heap_t heap = heap_new(5, &heap_comp);
+    assert_equal(heap->cmp, &heap_comp);
+    assert_equal(heap->cmp(&a, &b), 1);
+    assert_equal(heap->cmp(&b, &a), 0);
 }
 
 void test_heap_new_has_n_null_nodes(void)
 {
     size_t s = 5;
     int i;
-    heap_t heap = heap_new(s);
+    heap_t heap = heap_new(s, &heap_comp);
     for(i = 0; i < s; i++)
 	assert_equal(heap->tree[i], NULL);
+}
+
+void test_heap_insert_1(void)
+{
+    int node = 2;
+    heap_t heap = heap_new(5, &heap_comp);
+    heap_insert(heap, &node);
+    assert_equal(heap->tree[0], &node);
 }
 
 TestSuite *heap_suite()
@@ -196,7 +218,9 @@ TestSuite *heap_suite()
     TestSuite *suite = create_test_suite();
     add_test(suite, test_heap_new);
     add_test(suite, test_heap_new_has_correct_size);
+    add_test(suite, test_heap_new_has_correct_cmp);
     add_test(suite, test_heap_new_has_n_null_nodes);
+    add_test(suite, test_heap_insert_1);
     return suite;
 }
 
