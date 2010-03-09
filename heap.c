@@ -47,3 +47,43 @@ heap_t heap_insert(heap_t heap, void *node)
 
     return heap;
 }
+
+heap_t heap_remove(heap_t heap)
+{
+    assert(heap != NULL);
+    int i;
+
+    /* Traverse the index to the last position */
+    for(i = 0; heap->tree[++i] != NULL;)
+    {}
+    i-=1;
+
+    heap->tree[0] = NULL;
+
+    /* The rightmost leaf as the first */
+    if(i > 0)
+    {
+	swap(heap, 0, i);
+    }
+    if(i < 2) /* After swapping, the heap has only the root node */
+	return heap;
+
+    i = 0;
+
+    if(!heap->cmp(heap->tree[i], heap->tree[LEFT(i)]))
+    {
+	if(!heap->cmp(heap->tree[i], heap->tree[RIGHT(i)]))
+	{
+	    /* Choose the child to be swapped with */
+	    int swp = heap->cmp(heap->tree[LEFT(i)],
+		    heap->tree[RIGHT(i)]) ? LEFT(i) : RIGHT(i);
+	    swap(heap, i, swp);
+	}
+	else
+	{
+	    swap(heap, i, LEFT(i));
+	}
+    }
+
+    return heap;
+}

@@ -210,7 +210,7 @@ void test_heap_insert_1(void)
     int node = 2;
     heap_t heap = heap_new(5, &heap_comp);
     heap_insert(heap, &node);
-    assert_equal(heap->tree[0], &node);
+    assert_equal(*(int*)heap->tree[0], node);
 }
 
 void test_heap_insert_2(void)
@@ -219,8 +219,9 @@ void test_heap_insert_2(void)
     heap_t heap = heap_new(5, &heap_comp);
     heap_insert(heap, &a);
     heap_insert(heap, &b);
-    assert_equal(heap->tree[0], &b);
-    assert_equal(heap->tree[1], &a);
+    /* The order should be 2, 3 */
+    assert_equal(*(int*)heap->tree[0], b);
+    assert_equal(*(int*)heap->tree[1], a);
 }
 
 void test_heap_insert_3(void)
@@ -230,9 +231,10 @@ void test_heap_insert_3(void)
     heap_insert(heap, &a);
     heap_insert(heap, &b);
     heap_insert(heap, &c);
-    assert_equal(heap->tree[0], &c); // 1
-    assert_equal(heap->tree[1], &a); // 3
-    assert_equal(heap->tree[2], &b); // 2
+    /* The order should be 1, 3, 2 */
+    assert_equal(*(int*)heap->tree[0], c); // 1
+    assert_equal(*(int*)heap->tree[1], a); // 3
+    assert_equal(*(int*)heap->tree[2], b); // 2
 }
 
 void test_heap_insert_4(void)
@@ -243,10 +245,11 @@ void test_heap_insert_4(void)
     heap_insert(heap, &b);
     heap_insert(heap, &c);
     heap_insert(heap, &d);
-    assert_equal(heap->tree[0], &d);
-    assert_equal(heap->tree[1], &c);
-    assert_equal(heap->tree[2], &b);
-    assert_equal(heap->tree[3], &a);
+    /* The order should be 0, 1, 2, 3 */
+    assert_equal(*(int*)heap->tree[0], d);
+    assert_equal(*(int*)heap->tree[1], c);
+    assert_equal(*(int*)heap->tree[2], b);
+    assert_equal(*(int*)heap->tree[3], a);
 }
 
 void test_heap_insert_4_in_correct_order(void)
@@ -257,6 +260,57 @@ void test_heap_insert_4_in_correct_order(void)
     heap_insert(heap, &c);
     heap_insert(heap, &b);
     heap_insert(heap, &a);
+    /* The order should be 0, 1, 2, 3 */
+    assert_equal(*(int*)heap->tree[0], d);
+    assert_equal(*(int*)heap->tree[1], c);
+    assert_equal(*(int*)heap->tree[2], b);
+    assert_equal(*(int*)heap->tree[3], a);
+}
+
+void test_heap_delete_size_1(void)
+{
+    int a = 5;
+    heap_t heap = heap_new(5, &heap_comp);
+    heap_insert(heap, &a);
+    heap_remove(heap);
+    assert_equal(heap->tree[0], NULL);
+}
+
+void test_heap_delete_size_2(void)
+{
+    int a = 5, b = 3;
+    heap_t heap = heap_new(5, &heap_comp);
+    heap_insert(heap, &a);
+    heap_insert(heap, &b);
+    /* The order should be now b, a and after the removal operation a
+     * should be in b's place; index 0 should be 5 */
+    heap_remove(heap);
+    assert_equal(*(int*)heap->tree[0], a);
+}
+
+void test_heap_delete_size_3(void)
+{
+    int a = 5, b = 3, c = 2;
+    heap_t heap = heap_new(5, &heap_comp);
+    heap_insert(heap, &a);
+    heap_insert(heap, &b);
+    heap_insert(heap, &c);
+    /* The order should be  c, a, b */
+    heap_remove(heap);
+    assert_equal(*(int*)heap->tree[0], b);
+}
+
+void test_heap_delete_size_4(void)
+{
+    int a = 3, b = 2, c = 1, d = 0;
+    heap_t heap = heap_new(5, &heap_comp);
+    heap_insert(heap, &a);
+    heap_insert(heap, &b);
+    heap_insert(heap, &c);
+    heap_insert(heap, &d);
+    /* The order should be 0, 1, 2, 3 */
+    heap_remove(heap);
+    assert_equal(*(int*)heap->tree[0], c);
 }
 
 TestSuite *heap_suite()
@@ -271,6 +325,10 @@ TestSuite *heap_suite()
     add_test(suite, test_heap_insert_3);
     add_test(suite, test_heap_insert_4);
     add_test(suite, test_heap_insert_4_in_correct_order);
+    add_test(suite, test_heap_delete_size_1);
+    add_test(suite, test_heap_delete_size_2);
+    add_test(suite, test_heap_delete_size_3);
+    add_test(suite, test_heap_delete_size_4);
     return suite;
 }
 
