@@ -165,6 +165,12 @@ void test_heap_new_has_correct_cmp(void)
     assert_equal(heap->cmp(&b, &a), 0);
 }
 
+void test_heap_new_has_zero_nodes(void)
+{
+    heap_t heap = heap_new(5, &heap_comp);
+    assert_equal(heap->nodes, 0);
+}
+
 void test_heap_new_has_n_null_nodes(void)
 {
     size_t s = 5;
@@ -234,6 +240,15 @@ void test_heap_insert_4_in_correct_order(void)
     assert_equal(*(int*)heap->tree[1], c);
     assert_equal(*(int*)heap->tree[2], b);
     assert_equal(*(int*)heap->tree[3], a);
+}
+
+void test_heap_inserting_increases_nodes(void)
+{
+    int a = 5, b = 2;
+    heap_t heap = heap_new(5, &heap_comp);
+    heap_insert(heap, &a);
+    heap_insert(heap, &b);
+    assert_equal(heap->nodes, 2);
 }
 
 void test_heap_delete_size_1(void)
@@ -320,11 +335,28 @@ void test_heap_delete_from_right(void)
     assert_equal(*(int*)heap->tree[4], 36);
 }
 
+void test_heap_deleting_decreases_nodes(void)
+{
+    int a = 1, b = 2, c = 3, d = 4, e = 5;
+    /* Causes the first swap to right */
+    heap_t heap = heap_new(10, &heap_comp);
+    heap_insert(heap, &a);
+    heap_insert(heap, &b);
+    heap_insert(heap, &c);
+    heap_insert(heap, &d);
+    heap_insert(heap, &e);
+    
+    heap_remove(heap);
+
+    assert_equal(heap->nodes, 4);
+}
+
 TestSuite *heap_suite()
 {
     TestSuite *suite = create_test_suite();
     add_test(suite, test_heap_new);
     add_test(suite, test_heap_new_has_correct_size);
+    add_test(suite, test_heap_new_has_zero_nodes);
     add_test(suite, test_heap_new_has_correct_cmp);
     add_test(suite, test_heap_new_has_n_null_nodes);
     add_test(suite, test_heap_insert_1);
@@ -332,12 +364,14 @@ TestSuite *heap_suite()
     add_test(suite, test_heap_insert_3);
     add_test(suite, test_heap_insert_4);
     add_test(suite, test_heap_insert_4_in_correct_order);
+    add_test(suite, test_heap_inserting_increases_nodes);
     add_test(suite, test_heap_delete_size_1);
     add_test(suite, test_heap_delete_size_2);
     add_test(suite, test_heap_delete_size_3);
     add_test(suite, test_heap_delete_size_4);
     add_test(suite, test_heap_delete_size_5);
     add_test(suite, test_heap_delete_from_right);
+    add_test(suite, test_heap_deleting_decreases_nodes);
     return suite;
 }
 
@@ -352,5 +386,5 @@ int main(int argc, const char *argv[])
         return run_single_test(suite, (char*)argv[1],
                 create_text_reporter());
     }
-    return run_test_suite(suite, create_text_reporter());
+    return run_test_suite(suite, create_cute_reporter());
 }

@@ -33,6 +33,7 @@ typedef int (*cmp_t)(void *, void *);
 struct heap
 {
     size_t size;
+    size_t nodes;
     void **tree;
     cmp_t cmp;
 };

@@ -78,6 +78,7 @@ heap_t heap_new(size_t size, cmp_t cmp)
     if(heap == NULL)
 	return NULL;
     heap->size = size;
+    heap->nodes = 0;
     heap->cmp = cmp;
     heap->tree = malloc(size * sizeof(void*));
     for(i = 0; i < size; i++)
@@ -100,6 +101,8 @@ heap_t heap_insert(heap_t heap, void *node)
 	i = PARENT(i);
     }
 
+    heap->nodes++;
+
     return heap;
 }
 
@@ -107,6 +110,8 @@ heap_t heap_remove(heap_t heap)
 {
     assert(heap != NULL);
     int i;
+
+    heap->nodes--;
 
     /* Traverse the index to the last position */
     for(i = 0; heap->tree[++i] != NULL;)
