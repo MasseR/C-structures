@@ -1,10 +1,13 @@
 #include <cgreen.h>
 #include <string.h>
+#include <assert.h>
 #include "stack.h"
 #include "heap.h"
 
 inline int heap_comp(void *a, void *b)
 {
+    assert(a != NULL);
+    assert(b != NULL);
     return *(int*)a <= *(int*)b;
 }
 
@@ -313,6 +316,44 @@ void test_heap_delete_size_4(void)
     assert_equal(*(int*)heap->tree[0], c);
 }
 
+void test_heap_delete_size_5(void)
+{
+    int a = 1, b = 2, c = 3, d = 4, e = 5;
+    /* Causes the first swap to right */
+    heap_t heap = heap_new(10, &heap_comp);
+    heap_insert(heap, &a);
+    heap_insert(heap, &b);
+    heap_insert(heap, &c);
+    heap_insert(heap, &d);
+    heap_insert(heap, &e);
+    
+    heap_remove(heap);
+    assert_equal(*(int*)heap->tree[0], b);
+    assert_equal(*(int*)heap->tree[1], d);
+    assert_equal(*(int*)heap->tree[2], c);
+    assert_equal(*(int*)heap->tree[3], e);
+}
+
+void test_heap_delete_from_right(void)
+{
+    int a = 1, b = 20, c = 5, d = 32, e = 36, f = 6;
+    /* Causes the left side to be a lot heavier */
+    heap_t heap = heap_new(10, &heap_comp);
+    heap_insert(heap, &a);
+    heap_insert(heap, &b);
+    heap_insert(heap, &c);
+    heap_insert(heap, &d);
+    heap_insert(heap, &e);
+    heap_insert(heap, &f);
+    heap_remove(heap);
+
+    assert_equal(*(int*)heap->tree[0], 5);
+    assert_equal(*(int*)heap->tree[1], 20);
+    assert_equal(*(int*)heap->tree[2], 6);
+    assert_equal(*(int*)heap->tree[3], 32);
+    assert_equal(*(int*)heap->tree[4], 36);
+}
+
 TestSuite *heap_suite()
 {
     TestSuite *suite = create_test_suite();
@@ -329,6 +370,8 @@ TestSuite *heap_suite()
     add_test(suite, test_heap_delete_size_2);
     add_test(suite, test_heap_delete_size_3);
     add_test(suite, test_heap_delete_size_4);
+    add_test(suite, test_heap_delete_size_5);
+    add_test(suite, test_heap_delete_from_right);
     return suite;
 }
 

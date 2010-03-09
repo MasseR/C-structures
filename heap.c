@@ -15,6 +15,37 @@ static heap_t swap(heap_t heap, int k, int l)
     return heap;
 }
 
+static heap_t downheap(heap_t heap)
+{
+    int i = 0;
+    while(LEFT(i) < heap->size && heap->tree[LEFT(i)] != NULL)
+    {
+	if(!heap->cmp(heap->tree[i], heap->tree[LEFT(i)]))
+	{
+	    if(heap->tree[RIGHT(i)] != NULL && !heap->cmp(heap->tree[i], heap->tree[RIGHT(i)]))
+	    {
+		/* Choose the child to be swapped with */
+		int swp = heap->cmp(heap->tree[LEFT(i)],
+			heap->tree[RIGHT(i)]) ? LEFT(i) : RIGHT(i);
+		swap(heap, i, swp);
+		i = swp;
+	    }
+	    else
+	    {
+		swap(heap, i, LEFT(i));
+		i = LEFT(i);
+	    }
+	}
+	else if(heap->tree[RIGHT(i)] != NULL && !heap->cmp(heap->tree[i], heap->tree[RIGHT(i)]))
+	{
+	    swap(heap, i, RIGHT(i));
+	}
+	else
+	    break;
+    }
+    return heap;
+}
+
 heap_t heap_new(size_t size, cmp_t cmp)
 {
     int i;
@@ -68,22 +99,7 @@ heap_t heap_remove(heap_t heap)
     if(i < 2) /* After swapping, the heap has only the root node */
 	return heap;
 
-    i = 0;
-
-    if(!heap->cmp(heap->tree[i], heap->tree[LEFT(i)]))
-    {
-	if(!heap->cmp(heap->tree[i], heap->tree[RIGHT(i)]))
-	{
-	    /* Choose the child to be swapped with */
-	    int swp = heap->cmp(heap->tree[LEFT(i)],
-		    heap->tree[RIGHT(i)]) ? LEFT(i) : RIGHT(i);
-	    swap(heap, i, swp);
-	}
-	else
-	{
-	    swap(heap, i, LEFT(i));
-	}
-    }
+    downheap(heap);
 
     return heap;
 }
