@@ -51,13 +51,7 @@ typedef struct stack_t stack;
  * Allocate space for a new stack item and fill with NULL data. Users should
  * not be required to use this function directly, instead @see stack_new which
  * allocates space for new items. */
-inline stack* stack_new(void)
-{
-    stack *s = malloc(sizeof(stack));
-    s->data = NULL;
-    s->next = NULL;
-    return s;
-}
+inline stack* stack_new(void);
 
 /* @brief Push new data to the stack
  *
@@ -74,13 +68,7 @@ inline stack* stack_new(void)
  *
  * @return The first stack item
  */
-inline stack* stack_push(void *data, stack* old)
-{
-    stack *s = stack_new();
-    s->data = data;
-    s->next = old;
-    return s;
-}
+inline stack* stack_push(void *data, stack* old);
 
 /* @brief Remove the first entry
  *
@@ -92,20 +80,11 @@ inline stack* stack_push(void *data, stack* old)
  * 
  * @return The next stack item
  */
-inline stack* stack_pop(stack* old)
-{
-    if(old == NULL) return NULL;
-    stack *s = old->next;
-    free(old);
-    return s;
-}
+inline stack* stack_pop(stack* old);
 
 /* @brief Return the data from the first item
  */
-inline void* stack_peek(stack *s)
-{
-    return s->data;
-}
+inline void* stack_peek(stack *s);
 
 
 #endif /* end of include guard: STACK_H */

@@ -132,15 +132,6 @@ void test_stack_pop_null(void)
     assert_equal(s, NULL);
 }
 
-void test_stack_no_comparison_error(void)
-{
-    stack *s = stack_push("hello", NULL);
-
-    assert_equal(stack_search(s, NULL, "hello"), -1);
-
-    free(s);
-}
-
 TestSuite *stack_suite()
 {
     TestSuite *suite = create_test_suite();
@@ -151,7 +142,6 @@ TestSuite *stack_suite()
     add_test(suite, test_stack_peek);
     add_test(suite, test_stack_pop);
     add_test(suite, test_stack_pop_null);
-    add_test(suite, test_stack_no_comparison_error);
     return suite;
 }
 

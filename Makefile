@@ -4,11 +4,14 @@ LDFLAGS=$(CFLAGS) $(LIBS)
 
 all: test
 
-structures.la: heap.o
-	ar rcs $@ heap.o
+structures.la: heap.o stack.o
+	ar rcs $@ heap.o stack.o
 
 heap.o: heap.h
 heap.o: heap.c
+
+stack.o: heap.h
+stack.o: heap.c
 
 test: structures.la test.c
 
@@ -18,4 +21,4 @@ runtest: test
 .PHONY: clean
 
 clean:
-	rm test
+	rm test *.o *.la
