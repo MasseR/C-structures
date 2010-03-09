@@ -100,26 +100,6 @@ inline stack* stack_pop(stack* old)
     return s;
 }
 
-/* @brief Return true if the element is found
- *
- * Try to find a specified element. Return true if the element is in
- * stack, otherwise return false
- */
-inline int stack_search(stack *head, int cmp(void *a, void *b), void *search)
-{
-    stack *iterator = head;
-    if(head == NULL)
-        return 0;
-    if(cmp == NULL)
-        return -1;
-    do
-    {
-        if(cmp(iterator->data, search))
-            return 1;
-    } while((iterator = iterator->next) != NULL);
-    return 0;
-}
-
 /* @brief Return the data from the first item
  */
 inline void* stack_peek(stack *s)

@@ -132,51 +132,6 @@ void test_stack_pop_null(void)
     assert_equal(s, NULL);
 }
 
-void test_stack_search_empty(void)
-{
-    assert_equal(stack_search(NULL, NULL, "foo"), 0);
-}
-
-void test_stack_search_one(void)
-{
-    stack *s = stack_push("hello", NULL);
-    int result = 0;
-    
-    result = stack_search(s, stack_comp, "hello");
-    assert_true(result);
-
-    result = stack_search(s, stack_comp, "world");
-    assert_false(result);
-
-    free(s);
-}
-
-void test_stack_search_multiple(void)
-{
-    stack *s = NULL;
-    int result = 0;
-
-    s = stack_push("oh", NULL);
-    s = stack_push("world", s);
-    s = stack_push("hello", s);
-
-    result = stack_search(s, stack_comp, "hello");
-    assert_true(result);
-
-    result = stack_search(s, stack_comp, "world");
-    assert_true(result);
-
-    result = stack_search(s, stack_comp, "oh");
-    assert_true(result);
-
-    result = stack_search(s, stack_comp, "foo");
-    assert_false(result);
-
-    s = stack_pop(s);
-    s = stack_pop(s);
-    s = stack_pop(s);
-}
-
 void test_stack_no_comparison_error(void)
 {
     stack *s = stack_push("hello", NULL);
@@ -196,9 +151,6 @@ TestSuite *stack_suite()
     add_test(suite, test_stack_peek);
     add_test(suite, test_stack_pop);
     add_test(suite, test_stack_pop_null);
-    add_test(suite, test_stack_search_empty);
-    add_test(suite, test_stack_search_one);
-    add_test(suite, test_stack_search_multiple);
     add_test(suite, test_stack_no_comparison_error);
     return suite;
 }
