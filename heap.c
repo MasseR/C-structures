@@ -22,6 +22,7 @@
  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  OTHER DEALINGS IN THE SOFTWARE.
 */
+#include <string.h>
 #include <assert.h>
 #include "heap.h"
 
@@ -75,7 +76,7 @@ heap_t heap_new(size_t size, cmp_t cmp)
     assert(cmp != NULL);
     int i;
     heap_t heap = NULL;
-    heap = malloc(HEAP_SIZE);
+    heap = malloc(sizeof(void*) * (HEAP_SIZE));
     if(heap == NULL)
 	return NULL;
     heap->size = size;
@@ -156,5 +157,24 @@ void heap_free(heap_t heap)
 	    heap->exfunc(heap->tree[i]);
     }
 
+    free(heap->tree);
     free(heap);
+}
+
+void heap_sort(void **array, size_t size, cmp_t cmp)
+{
+    heap_t heap = heap_new(size + 1, cmp);
+    int i;
+
+    for(i = 0; i < size; i++)
+    {
+	heap_insert(heap, array[i]);
+    }
+
+    for(i = 0; i < size; i++)
+    {
+	array[i] = heap_peek(heap);
+	heap_remove(heap);
+    }
+    heap_free(heap);
 }

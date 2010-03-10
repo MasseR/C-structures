@@ -436,6 +436,32 @@ void test_heap_remove_calls_exit(void)
     assert_equal(deletions, 3);
 }
 
+void test_heap_sort(void)
+{
+    int i;
+    size_t size = 5;
+    void **array = NULL;
+    array = malloc(sizeof(int*) * size);
+    for(i = 0; i < size; i++)
+	array[i] = malloc(sizeof(int));
+    *(int*)array[0] = 3;
+    *(int*)array[1] = 1;
+    *(int*)array[2] = 9;
+    *(int*)array[3] = 5;
+    *(int*)array[4] = 8;
+
+    heap_sort((void*)array, size, heap_comp);
+    assert_equal(*(int*)array[0], 1);
+    assert_equal(*(int*)array[1], 3);
+    assert_equal(*(int*)array[2], 5);
+    assert_equal(*(int*)array[3], 8);
+    assert_equal(*(int*)array[4], 9);
+
+    for(i = 0; i < size; i++)
+	free(array[i]);
+    free(array);
+}
+
 TestSuite *heap_suite()
 {
     TestSuite *suite = create_test_suite();
@@ -463,6 +489,7 @@ TestSuite *heap_suite()
     add_test(suite, test_heap_remove_calls_exit);
     add_test(suite, test_heap_free);
     add_test(suite, test_heap_free_no_exit_func);
+    add_test(suite, test_heap_sort);
     return suite;
 }
 
@@ -477,5 +504,5 @@ int main(int argc, const char *argv[])
         return run_single_test(suite, (char*)argv[1],
                 create_text_reporter());
     }
-    return run_test_suite(suite, create_cute_reporter());
+    return run_test_suite(suite, create_text_reporter());
 }

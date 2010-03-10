@@ -115,5 +115,7 @@ heap_t heap_set_on_exit(heap_t heap, exit_func e);
  */
 void heap_free(heap_t heap);
 
+void heap_sort(void **array, size_t size, cmp_t cmp);
+
 #endif /* end of include guard: HEAP_6HM1TBFB */
 
