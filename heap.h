@@ -29,6 +29,7 @@
 #include <stdlib.h>
 
 typedef int (*cmp_t)(void *, void *);
+typedef void (*exit_func)(void *);
 
 struct heap
 {
@@ -36,6 +37,7 @@ struct heap
     size_t nodes;
     void **tree;
     cmp_t cmp;
+    exit_func exfunc;
 };
 
 typedef struct heap* heap_t;
@@ -47,7 +49,10 @@ heap_t heap_insert(heap_t heap, void *node);
 
 heap_t heap_remove(heap_t heap);
 
+heap_t heap_set_on_exit(heap_t heap, exit_func e);
+
 void *heap_peek(heap_t heap);
+
 
 #endif /* end of include guard: HEAP_6HM1TBFB */
 

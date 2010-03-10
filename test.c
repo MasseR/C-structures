@@ -28,6 +28,8 @@
 #include "stack.h"
 #include "heap.h"
 
+static int deletions;
+
 inline int heap_comp(void *a, void *b)
 {
     assert(a != NULL);
@@ -38,6 +40,11 @@ inline int heap_comp(void *a, void *b)
 inline int stack_comp(void *a, void *b)
 {
     return !strcmp((char*)a, (char*)b);
+}
+
+inline void heap_on_exit(void *a)
+{
+    deletions++;
 }
 
 void test_stack_create_new(void)
@@ -370,6 +377,34 @@ void test_heap_insert_2_peek(void)
     assert_equal(*(int*)heap_peek(heap), 1);
 }
 
+void test_heap_set_delete_func(void)
+{
+    heap_t heap = heap_new(5, &heap_comp);
+    heap_set_on_exit(heap, &heap_on_exit);
+    assert_equal(heap->exfunc, &heap_on_exit);
+}
+
+void test_heap_remove_calls_exit(void)
+{
+    int a = 5, b = 3, c = 2;
+    heap_t heap = heap_new(5, &heap_comp);
+
+    deletions = 0;
+
+    heap_set_on_exit(heap, &heap_on_exit);
+
+    heap_insert(heap, &a);
+    heap_insert(heap, &b);
+    heap_insert(heap, &c);
+
+    heap_remove(heap);
+    assert_equal(deletions, 1);
+    heap_remove(heap);
+    assert_equal(deletions, 2);
+    heap_remove(heap);
+    assert_equal(deletions, 3);
+}
+
 TestSuite *heap_suite()
 {
     TestSuite *suite = create_test_suite();
@@ -393,6 +428,8 @@ TestSuite *heap_suite()
     add_test(suite, test_heap_deleting_decreases_nodes);
     add_test(suite, test_heap_insert_1_peek);
     add_test(suite, test_heap_insert_2_peek);
+    add_test(suite, test_heap_set_delete_func);
+    add_test(suite, test_heap_remove_calls_exit);
     return suite;
 }
 

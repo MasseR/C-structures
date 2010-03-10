@@ -80,6 +80,7 @@ heap_t heap_new(size_t size, cmp_t cmp)
     heap->size = size;
     heap->nodes = 0;
     heap->cmp = cmp;
+    heap->exfunc = NULL;
     heap->tree = malloc(size * sizeof(void*));
     for(i = 0; i < size; i++)
 	heap->tree[i] = NULL;
@@ -113,6 +114,9 @@ heap_t heap_remove(heap_t heap)
 
     heap->nodes--;
 
+    if(heap->exfunc != NULL)
+	heap->exfunc(heap->tree[0]);
+
     /* Traverse the index to the last position */
     for(i = 0; heap->tree[++i] != NULL;)
     {}
@@ -137,4 +141,10 @@ void *heap_peek(heap_t heap)
 {
     assert(heap != NULL);
     return heap->tree[0];
+}
+
+heap_t heap_set_on_exit(heap_t heap, exit_func e)
+{
+    heap->exfunc = e;
+    return heap;
 }
