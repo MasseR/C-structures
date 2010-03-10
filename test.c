@@ -159,7 +159,7 @@ void test_heap_new(void)
 
 void test_heap_new_has_correct_size(void)
 {
-    heap_t heap = heap_new(5, NULL);
+    heap_t heap = heap_new(5, &heap_comp);
     assert_equal(heap->size, 5);
 }
 

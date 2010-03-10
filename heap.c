@@ -141,12 +141,6 @@ heap_t heap_remove(heap_t heap)
     return heap;
 }
 
-void *heap_peek(heap_t heap)
-{
-    assert(heap != NULL);
-    return heap->tree[0];
-}
-
 heap_t heap_set_on_exit(heap_t heap, exit_func e)
 {
     heap->exfunc = e;
