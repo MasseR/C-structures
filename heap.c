@@ -72,6 +72,7 @@ static heap_t downheap(heap_t heap)
 
 heap_t heap_new(size_t size, cmp_t cmp)
 {
+    assert(cmp != NULL);
     int i;
     heap_t heap = NULL;
     heap = malloc(HEAP_SIZE);
