@@ -384,6 +384,37 @@ void test_heap_set_delete_func(void)
     assert_equal(heap->exfunc, &heap_on_exit);
 }
 
+void test_heap_free(void)
+{
+    /* This should also be checked with valgrind, to make sure the entire
+     * struct has been free'd */
+    int a = 5, b = 3, c = 1;
+    deletions = 0;
+    heap_t heap = heap_new(5, &heap_comp);
+    heap_set_on_exit(heap, &heap_on_exit);
+
+    heap_insert(heap, &a);
+    heap_insert(heap, &b);
+    heap_insert(heap, &c);
+
+    heap_free(heap);
+    assert_equal(deletions, 3);
+}
+
+void test_heap_free_no_exit_func(void)
+{
+    int a = 5, b = 3, c = 1;
+    deletions = 0;
+    heap_t heap = heap_new(5, &heap_comp);
+
+    heap_insert(heap, &a);
+    heap_insert(heap, &b);
+    heap_insert(heap, &c);
+
+    heap_free(heap);
+    assert_equal(deletions, 0);
+}
+
 void test_heap_remove_calls_exit(void)
 {
     int a = 5, b = 3, c = 2;
@@ -430,6 +461,8 @@ TestSuite *heap_suite()
     add_test(suite, test_heap_insert_2_peek);
     add_test(suite, test_heap_set_delete_func);
     add_test(suite, test_heap_remove_calls_exit);
+    add_test(suite, test_heap_free);
+    add_test(suite, test_heap_free_no_exit_func);
     return suite;
 }
 

@@ -53,6 +53,7 @@ heap_t heap_set_on_exit(heap_t heap, exit_func e);
 
 void *heap_peek(heap_t heap);
 
+void heap_free(heap_t heap);
 
 #endif /* end of include guard: HEAP_6HM1TBFB */
 

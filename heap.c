@@ -148,3 +148,15 @@ heap_t heap_set_on_exit(heap_t heap, exit_func e)
     heap->exfunc = e;
     return heap;
 }
+
+void heap_free(heap_t heap)
+{
+    int i;
+    for(i = 0; i < heap->size && heap->tree[i] != NULL; i++)
+    {
+	if(heap->exfunc != NULL)
+	    heap->exfunc(heap->tree[i]);
+    }
+
+    free(heap);
+}
