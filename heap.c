@@ -91,6 +91,9 @@ heap_t heap_new(size_t size, cmp_t cmp)
 heap_t heap_insert(heap_t heap, void *node)
 {
     assert(heap != NULL);
+    assert(node != NULL); /* We use NULL to find the next empty node. Using
+			     null as a node would mean putting holes into the
+			     heap, which by definition is not allowed */
     int i = 0;
 
     /* Find the first NULL */
