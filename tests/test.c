@@ -42,7 +42,7 @@ inline int stack_comp(void *a, void *b)
     return !strcmp((char*)a, (char*)b);
 }
 
-inline void heap_on_exit(void *a)
+inline void heap_on_exit(void __attribute__((__unused__))*a)
 {
     deletions++;
 }
@@ -181,7 +181,7 @@ void test_heap_new_has_zero_nodes(void)
 void test_heap_new_has_n_null_nodes(void)
 {
     size_t s = 5;
-    int i;
+    unsigned int i;
     heap_t heap = heap_new(s, &heap_comp);
     for(i = 0; i < s; i++)
 	assert_equal(heap->tree[i], NULL);
@@ -438,7 +438,7 @@ void test_heap_remove_calls_exit(void)
 
 void test_heap_sort(void)
 {
-    int i;
+    unsigned int i;
     size_t size = 5;
     void **array = NULL;
     array = malloc(sizeof(int*) * size);

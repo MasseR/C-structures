@@ -42,7 +42,7 @@ static heap_t swap(heap_t heap, int k, int l)
 
 static heap_t downheap(heap_t heap)
 {
-    int i = 0;
+    unsigned int i = 0;
     while(LEFT(i) < heap->size && heap->tree[LEFT(i)] != NULL)
     {
 	if(!heap->cmp(heap->tree[i], heap->tree[LEFT(i)]))
@@ -74,7 +74,7 @@ static heap_t downheap(heap_t heap)
 heap_t heap_new(size_t size, cmp_t cmp)
 {
     assert(cmp != NULL);
-    int i;
+    unsigned int i;
     heap_t heap = NULL;
     heap = malloc(sizeof(void*) * (HEAP_SIZE));
     if(heap == NULL)
@@ -150,7 +150,7 @@ heap_t heap_set_on_exit(heap_t heap, exit_func e)
 
 void heap_free(heap_t heap)
 {
-    int i;
+    unsigned int i;
     for(i = 0; i < heap->size && heap->tree[i] != NULL; i++)
     {
 	if(heap->exfunc != NULL)
@@ -164,7 +164,7 @@ void heap_free(heap_t heap)
 void heap_sort(void **array, size_t size, cmp_t cmp)
 {
     heap_t heap = heap_new(size + 1, cmp);
-    int i;
+    unsigned int i;
 
     for(i = 0; i < size; i++)
     {
