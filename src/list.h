@@ -17,4 +17,7 @@ list_t list_new(void *data);
 list_t list_push_front(list_t list, void *data);
 list_t list_push_tail(list_t list, void *data);
 
+void *list_get_front(list_t list);
+void *list_get_tail(list_t list);
+
 #endif /* end of include guard: LIST_RC86CSMV */

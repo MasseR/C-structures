@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <assert.h>
 #include "list.h"
 
 list_t list_new(void *data)
@@ -29,4 +30,20 @@ list_t list_push_tail(list_t list, void *data)
     {}
     iterator->next = new;
     return list;
+}
+
+void *list_get_front(list_t list)
+{
+    assert(list != NULL);
+    return list->data;
+}
+
+void *list_get_tail(list_t list)
+{
+    assert(list != NULL);
+    list_t iterator;
+    for(iterator = list; iterator->next != NULL;
+	   iterator = iterator->next)
+    {}
+    return iterator->data;
 }

@@ -579,6 +579,22 @@ void test_list_push_tail_4_inserts_end(void)
     assert_equal(*(int*)first->data, 5);
 }
 
+void test_list_get_front(void)
+{
+    int a = 5, b = 3;
+    list_t list = list_push_front(NULL, &a);
+    list = list_push_front(list, &b);
+    assert_equal(*(int*)list_get_front(list), 3);
+}
+
+void test_list_get_tail(void)
+{
+    int a = 5, b = 3;
+    list_t list = list_push_tail(NULL, &a);
+    list = list_push_tail(list, &b);
+    assert_equal(*(int*)list_get_tail(list), 3);
+}
+
 TestSuite *list_suite()
 {
     TestSuite *suite = create_test_suite();
@@ -591,6 +607,8 @@ TestSuite *list_suite()
     add_test(suite, test_list_push_tail_2_inserts_end);
     add_test(suite, test_list_push_tail_3_inserts_end);
     add_test(suite, test_list_push_tail_4_inserts_end);
+    add_test(suite, test_list_get_front);
+    add_test(suite, test_list_get_tail);
     return suite;
 }
 
