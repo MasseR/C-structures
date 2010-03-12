@@ -10,3 +10,11 @@ list_t list_new(void *data)
     list->next = NULL;
     return list;
 }
+
+list_t list_push_front(list_t list, void *data)
+{
+    list_t new = list_new(data);
+    if(list != NULL)
+	new->next = list;
+    return new;
+}

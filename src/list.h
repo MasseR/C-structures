@@ -14,4 +14,6 @@ typedef struct list* list_t;
 
 list_t list_new(void *data);
 
+list_t list_push_front(list_t list, void *data);
+
 #endif /* end of include guard: LIST_RC86CSMV */

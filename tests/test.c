@@ -499,17 +499,30 @@ void test_list_new(void)
     list_t __attribute__((__unused__))list = list_new(NULL);
 }
 
-void test_list_new_no_null(void)
-{
-    list_t list = list_new(NULL);
-    assert_false(list == NULL);
-}
-
 void test_list_new_has_data(void)
 {
     int a = 5;
     list_t list = list_new(&a);
     assert_equal(*(int*)list->data, 5);
+}
+
+void test_list_push_front_with_null_creates_new(void)
+{
+    int a = 5;
+    list_t list = list_push_front(NULL, &a);
+    assert_equal(*(int*)list->data, 5);
+    assert_equal(list->next, NULL);
+}
+
+void test_list_push_front_2(void)
+{
+    int a = 5, b = 3;
+    list_t prev = list_push_front(NULL, &a);
+    list_t list = list_push_front(prev, &b);
+    assert_equal(*(int*)list->data, 3);
+    assert_equal(list->next, prev);
+    assert_equal(*(int*)list->next->data, 5);
+    assert_equal(list->next->next, NULL);
 }
 
 void test_list_new_next_is_null(void)
@@ -523,9 +536,10 @@ TestSuite *list_suite()
 {
     TestSuite *suite = create_test_suite();
     add_test(suite, test_list_new);
-    add_test(suite, test_list_new_no_null);
     add_test(suite, test_list_new_has_data);
     add_test(suite, test_list_new_next_is_null);
+    add_test(suite, test_list_push_front_with_null_creates_new);
+    add_test(suite, test_list_push_front_2);
     return suite;
 }
 
