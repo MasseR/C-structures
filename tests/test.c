@@ -27,6 +27,7 @@
 #include <assert.h>
 #include "../src/stack.h"
 #include "../src/heap.h"
+#include "../src/list.h"
 
 static int deletions;
 
@@ -493,11 +494,47 @@ TestSuite *heap_suite()
     return suite;
 }
 
+void test_list_new(void)
+{
+    list_t __attribute__((__unused__))list = list_new(NULL);
+}
+
+void test_list_new_no_null(void)
+{
+    list_t list = list_new(NULL);
+    assert_false(list == NULL);
+}
+
+void test_list_new_has_data(void)
+{
+    int a = 5;
+    list_t list = list_new(&a);
+    assert_equal(*(int*)list->data, 5);
+}
+
+void test_list_new_next_is_null(void)
+{
+    int a = 5;
+    list_t list = list_new(&a);
+    assert_equal(list->next, NULL);
+}
+
+TestSuite *list_suite()
+{
+    TestSuite *suite = create_test_suite();
+    add_test(suite, test_list_new);
+    add_test(suite, test_list_new_no_null);
+    add_test(suite, test_list_new_has_data);
+    add_test(suite, test_list_new_next_is_null);
+    return suite;
+}
+
 int main(int argc, const char *argv[])
 {
     TestSuite *suite = create_test_suite();
     add_suite(suite, stack_suite());
     add_suite(suite, heap_suite());
+    add_suite(suite, list_suite());
 
     if(argc > 1)
     {
