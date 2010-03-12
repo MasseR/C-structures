@@ -1,4 +1,24 @@
-C structures and algorithms, such as stack, queue, heap etc.
+Abstract
+-------
+
+Utilities and structures for C. C standard library doesn't have many of the
+usual utilities that one might need, such as lists and maps. This project
+is an attempt to provide a good alternative for such tools.
 
 
-I keep making them as I need them or want to dabble in new algorithms.
+Current status
+--------------
+
+Structures
+ - list
+ - heap
+ - stack
+
+Tools
+ - Heapsort
+
+Planned
+-------
+
+Structures
+ - Triemap
