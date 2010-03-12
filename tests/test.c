@@ -746,6 +746,29 @@ void test_list_free_does_not_calls_foreach(void)
     /* Should segfault if tries to call the func */
 }
 
+void test_list_at_in_range(void)
+{
+    int a = 5, b = 3, c = 4;
+    list_t list = NULL;
+    list = list_push_front(list, &a);
+    list = list_push_front(list, &b);
+    list = list_push_front(list, &c);
+    assert_equal(*(int*)list_at(list, 0), 4);
+    assert_equal(*(int*)list_at(list, 1), 3);
+    assert_equal(*(int*)list_at(list, 2), 5);
+}
+
+void test_list_at_out_range(void)
+{
+    int a = 5, b = 3, c = 4;
+    list_t list = NULL;
+    list = list_push_front(list, &a);
+    list = list_push_front(list, &b);
+    list = list_push_front(list, &c);
+    assert_equal(list_at(list, 3), NULL);
+    assert_equal(list_at(list, 4), NULL);
+}
+
 TestSuite *list_suite()
 {
     TestSuite *suite = create_test_suite();
@@ -775,6 +798,8 @@ TestSuite *list_suite()
     add_test(suite, test_list_foreach_no_callback);
     add_test(suite, test_list_free_calls_foreach);
     add_test(suite, test_list_free_does_not_calls_foreach);
+    add_test(suite, test_list_at_in_range);
+    add_test(suite, test_list_at_out_range);
     return suite;
 }
 

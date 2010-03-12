@@ -25,6 +25,7 @@ list_t list_free(list_t list, func_t func);
 
 void *list_get_front(list_t list);
 void *list_get_tail(list_t list);
+void *list_at(list_t list, unsigned int idx);
 
 void list_foreach(list_t list, func_t func);
 

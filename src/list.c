@@ -110,3 +110,11 @@ list_t list_free(list_t list, func_t func)
     free(previous);
     return NULL;
 }
+
+void *list_at(list_t list, unsigned int idx)
+{
+    assert(list != NULL);
+    list_t iterator = NULL;
+    for(iterator = list; idx > 0 && iterator != NULL; idx--, iterator = iterator->next) {}
+    return (iterator!=NULL)?iterator->data:NULL;
+}
