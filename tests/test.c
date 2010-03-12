@@ -532,6 +532,53 @@ void test_list_new_next_is_null(void)
     assert_equal(list->next, NULL);
 }
 
+void test_list_push_tail_with_null_creates_new(void)
+{
+    int a = 5;
+    list_t list = list_push_tail(NULL, &a);
+    assert_equal(*(int*)list->data, 5);
+    assert_equal(list->next, NULL);
+}
+
+void test_list_push_tail_2_inserts_end(void)
+{
+    int a = 5, b = 3;
+    list_t first = list_push_tail(NULL, &a);
+    list_t second = list_push_tail(first, &b);
+    assert_equal(first, second);
+    assert_equal(*(int*)first->next->data, 3);
+    assert_equal(*(int*)first->data, 5);
+}
+
+void test_list_push_tail_3_inserts_end(void)
+{
+    int a = 5, b = 3, c = 4;
+    list_t first = list_push_tail(NULL, &a);
+    list_t second = list_push_tail(first, &b);
+    list_t third = list_push_tail(second, &c);
+    assert_equal(first, second);
+    assert_equal(first, third);
+    assert_equal(*(int*)first->next->next->data, 4);
+    assert_equal(*(int*)first->next->data, 3);
+    assert_equal(*(int*)first->data, 5);
+}
+
+void test_list_push_tail_4_inserts_end(void)
+{
+    int a = 5, b = 3, c = 4, d = 6;
+    list_t first = list_push_tail(NULL, &a);
+    list_t second = list_push_tail(first, &b);
+    list_t third = list_push_tail(second, &c);
+    list_t fourth = list_push_tail(third, &d);
+    assert_equal(first, second);
+    assert_equal(first, third);
+    assert_equal(first, fourth);
+    assert_equal(*(int*)first->next->next->next->data, 6);
+    assert_equal(*(int*)first->next->next->data, 4);
+    assert_equal(*(int*)first->next->data, 3);
+    assert_equal(*(int*)first->data, 5);
+}
+
 TestSuite *list_suite()
 {
     TestSuite *suite = create_test_suite();
@@ -540,6 +587,10 @@ TestSuite *list_suite()
     add_test(suite, test_list_new_next_is_null);
     add_test(suite, test_list_push_front_with_null_creates_new);
     add_test(suite, test_list_push_front_2);
+    add_test(suite, test_list_push_tail_with_null_creates_new);
+    add_test(suite, test_list_push_tail_2_inserts_end);
+    add_test(suite, test_list_push_tail_3_inserts_end);
+    add_test(suite, test_list_push_tail_4_inserts_end);
     return suite;
 }
 

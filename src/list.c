@@ -18,3 +18,15 @@ list_t list_push_front(list_t list, void *data)
 	new->next = list;
     return new;
 }
+
+list_t list_push_tail(list_t list, void *data)
+{
+    list_t iterator;
+    list_t new = list_new(data);
+    if(list == NULL)
+	return new;
+    for(iterator = list; iterator->next != NULL; iterator = iterator->next)
+    {}
+    iterator->next = new;
+    return list;
+}
