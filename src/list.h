@@ -11,6 +11,7 @@ struct list
 };
 
 typedef struct list* list_t;
+typedef void (*func_t)(void *data);
 
 list_t list_new(void *data);
 
@@ -20,8 +21,12 @@ list_t list_pop_front(list_t list);
 list_t list_push_tail(list_t list, void *data);
 list_t list_pop_tail(list_t list);
 
+list_t list_free(list_t list, func_t func);
+
 void *list_get_front(list_t list);
 void *list_get_tail(list_t list);
+
+void list_foreach(list_t list, func_t func);
 
 size_t list_size(list_t list);
 

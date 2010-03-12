@@ -90,3 +90,23 @@ size_t list_size(list_t list)
 	size++;
     return size;
 }
+
+void list_foreach(list_t list, func_t func)
+{
+    assert(list != NULL);
+    list_t iter;
+    if(func == NULL)
+	return;
+    for(iter = list; iter != NULL; iter = iter->next)
+	func(iter->data);
+}
+
+list_t list_free(list_t list, func_t func)
+{
+    list_t iterator = NULL, previous = NULL;
+    list_foreach(list, func);
+    for(iterator = list; iterator != NULL; previous = iterator, iterator = iterator->next)
+	free(previous);
+    free(previous);
+    return NULL;
+}

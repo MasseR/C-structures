@@ -43,9 +43,10 @@ inline int stack_comp(void *a, void *b)
     return !strcmp((char*)a, (char*)b);
 }
 
-inline void heap_on_exit(void __attribute__((__unused__))*a)
+inline void counter_increase(void *a)
 {
-    deletions++;
+    if(a != NULL)
+	deletions++;
 }
 
 void test_stack_create_new(void)
@@ -381,8 +382,8 @@ void test_heap_insert_2_peek(void)
 void test_heap_set_delete_func(void)
 {
     heap_t heap = heap_new(5, &heap_comp);
-    heap_set_on_exit(heap, &heap_on_exit);
-    assert_equal(heap->exfunc, &heap_on_exit);
+    heap_set_on_exit(heap, &counter_increase);
+    assert_equal(heap->exfunc, &counter_increase);
 }
 
 void test_heap_free(void)
@@ -392,7 +393,7 @@ void test_heap_free(void)
     int a = 5, b = 3, c = 1;
     deletions = 0;
     heap_t heap = heap_new(5, &heap_comp);
-    heap_set_on_exit(heap, &heap_on_exit);
+    heap_set_on_exit(heap, &counter_increase);
 
     heap_insert(heap, &a);
     heap_insert(heap, &b);
@@ -423,7 +424,7 @@ void test_heap_remove_calls_exit(void)
 
     deletions = 0;
 
-    heap_set_on_exit(heap, &heap_on_exit);
+    heap_set_on_exit(heap, &counter_increase);
 
     heap_insert(heap, &a);
     heap_insert(heap, &b);
@@ -682,6 +683,69 @@ void test_list_pop_tail_3_returns_first(void)
     assert_equal(*(int*)list_get_tail(after_pop), 3);
 }
 
+void test_list_foreach_size_1(void)
+{
+    int a = 5;
+    deletions = 0;
+    list_t list = list_push_front(NULL, &a);
+    list_foreach(list, &counter_increase);
+    assert_equal(deletions, 1);
+}
+
+void test_list_foreach_size_2(void)
+{
+    int a = 5, b = 3;
+    deletions = 0;
+    list_t list = list_push_front(NULL, &a);
+    list = list_push_front(list, &b);
+    list_foreach(list, &counter_increase);
+    assert_equal(deletions, 2);
+}
+
+void test_list_foreach_size_3(void)
+{
+    int a = 5, b = 3, c = 4;
+    deletions = 0;
+    list_t list = list_push_front(NULL, &a);
+    list = list_push_front(list, &b);
+    list = list_push_front(list, &c);
+    list_foreach(list, &counter_increase);
+    assert_equal(deletions, 3);
+}
+
+void test_list_foreach_no_callback(void)
+{
+    list_t list = NULL;
+    list = list_push_front(list, NULL);
+    list = list_push_front(list, NULL);
+    list = list_push_front(list, NULL);
+    list_foreach(list, NULL);
+}
+
+void test_list_free_calls_foreach(void)
+{
+    int a = 5, b = 3, c = 4;
+    list_t list = NULL;
+    list = list_push_front(list, &a);
+    list = list_push_front(list, &b);
+    list = list_push_front(list, &c);
+    list = list_free(list, &counter_increase);
+    assert_equal(list, NULL);
+    assert_equal(deletions, 3);
+}
+
+void test_list_free_does_not_calls_foreach(void)
+{
+    int a = 5, b = 3, c = 4;
+    list_t list = NULL;
+    list = list_push_front(list, &a);
+    list = list_push_front(list, &b);
+    list = list_push_front(list, &c);
+    list = list_free(list, NULL);
+    assert_equal(list, NULL);
+    /* Should segfault if tries to call the func */
+}
+
 TestSuite *list_suite()
 {
     TestSuite *suite = create_test_suite();
@@ -705,6 +769,12 @@ TestSuite *list_suite()
     add_test(suite, test_list_pop_tail_1_returns_null);
     add_test(suite, test_list_pop_tail_2_returns_first);
     add_test(suite, test_list_pop_tail_3_returns_first);
+    add_test(suite, test_list_foreach_size_1);
+    add_test(suite, test_list_foreach_size_2);
+    add_test(suite, test_list_foreach_size_3);
+    add_test(suite, test_list_foreach_no_callback);
+    add_test(suite, test_list_free_calls_foreach);
+    add_test(suite, test_list_free_does_not_calls_foreach);
     return suite;
 }
 
