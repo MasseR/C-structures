@@ -579,6 +579,37 @@ void test_list_push_tail_4_inserts_end(void)
     assert_equal(*(int*)first->data, 5);
 }
 
+
+void test_list_push_front_size_0(void)
+{
+    list_t list = NULL;
+    assert_equal(list_size(list), 0);
+}
+
+void test_list_push_front_size_1(void)
+{
+    list_t list = NULL;
+    list = list_push_front(list, NULL);
+    assert_equal(list_size(list), 1);
+}
+
+void test_list_push_front_size_2(void)
+{
+    list_t list = NULL;
+    list = list_push_front(list, NULL);
+    list = list_push_front(list, NULL);
+    assert_equal(list_size(list), 2);
+}
+
+void test_list_push_front_size_3(void)
+{
+    list_t list = NULL;
+    list = list_push_front(list, NULL);
+    list = list_push_front(list, NULL);
+    list = list_push_front(list, NULL);
+    assert_equal(list_size(list), 3);
+}
+
 void test_list_get_front(void)
 {
     int a = 5, b = 3;
@@ -595,6 +626,62 @@ void test_list_get_tail(void)
     assert_equal(*(int*)list_get_tail(list), 3);
 }
 
+void test_list_pop_front_1_returns_null(void)
+{
+    list_t list = NULL;
+    int a = 5;
+    list = list_push_front(list, &a);
+    list = list_pop_front(list);
+    assert_equal(list, NULL);
+    assert_equal(list_size(list), 0);
+}
+
+void test_list_pop_front_2_returns_second(void)
+{
+    int a = 5, b = 3;
+    list_t list = NULL;
+    list = list_push_front(list, &a);
+    list = list_push_front(list, &b);
+    list = list_pop_front(list);
+    assert_equal(*(int*)list->data, 5);
+    assert_equal(list_size(list), 1);
+}
+
+void test_list_pop_tail_1_returns_null(void)
+{
+    int a = 5;
+    list_t list = NULL;
+    list = list_push_front(list, &a);
+    list = list_pop_tail(list);
+    assert_equal(list, NULL);
+    assert_equal(list_size(list), 0);
+}
+
+void test_list_pop_tail_2_returns_first(void)
+{
+    int a = 5, b = 3;
+    list_t list = NULL, after_pop = NULL;
+    list = list_push_tail(list, &a);
+    list = list_push_tail(list, &b);
+    after_pop = list_pop_tail(list);
+    assert_equal(list, after_pop);
+    assert_equal(list_size(after_pop), 1);
+    assert_equal(*(int*)list_get_tail(after_pop), 5);
+}
+
+void test_list_pop_tail_3_returns_first(void)
+{
+    int a = 5, b = 3, c = 4;
+    list_t list = NULL, after_pop = NULL;
+    list = list_push_tail(list, &a);
+    list = list_push_tail(list, &b);
+    list = list_push_tail(list, &c);
+    after_pop = list_pop_tail(list);
+    assert_equal(list, after_pop);
+    assert_equal(list_size(after_pop), 2);
+    assert_equal(*(int*)list_get_tail(after_pop), 3);
+}
+
 TestSuite *list_suite()
 {
     TestSuite *suite = create_test_suite();
@@ -607,8 +694,17 @@ TestSuite *list_suite()
     add_test(suite, test_list_push_tail_2_inserts_end);
     add_test(suite, test_list_push_tail_3_inserts_end);
     add_test(suite, test_list_push_tail_4_inserts_end);
+    add_test(suite, test_list_push_front_size_0);
+    add_test(suite, test_list_push_front_size_1);
+    add_test(suite, test_list_push_front_size_2);
+    add_test(suite, test_list_push_front_size_3);
     add_test(suite, test_list_get_front);
     add_test(suite, test_list_get_tail);
+    add_test(suite, test_list_pop_front_1_returns_null);
+    add_test(suite, test_list_pop_front_2_returns_second);
+    add_test(suite, test_list_pop_tail_1_returns_null);
+    add_test(suite, test_list_pop_tail_2_returns_first);
+    add_test(suite, test_list_pop_tail_3_returns_first);
     return suite;
 }
 

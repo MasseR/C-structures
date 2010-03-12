@@ -47,3 +47,46 @@ void *list_get_tail(list_t list)
     {}
     return iterator->data;
 }
+
+list_t list_pop_front(list_t list)
+{
+    list_t next = list->next;
+    free(list);
+    return next;
+}
+
+list_t list_pop_tail(list_t list)
+{
+    assert(list != NULL);
+    list_t iterator;
+    list_t previous;
+    if(list->next == NULL)
+    {
+	free(list);
+	return NULL;
+    }
+    else
+    {
+	for(iterator = list;
+		iterator->next != NULL;
+		previous = iterator, iterator = iterator->next)
+	{
+	}
+	free(iterator);
+	previous->next = NULL;
+    }
+    return list;
+}
+
+size_t list_size(list_t list)
+{
+    size_t size = 0;
+    list_t iterator;
+    if(list == NULL)
+	return 0;
+    for(iterator = list;
+	    iterator != NULL;
+	    iterator = iterator->next)
+	size++;
+    return size;
+}
