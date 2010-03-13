@@ -39,19 +39,17 @@
 
 #define STACK_H
 #include <stdlib.h>
+#include "list.h"
 
-struct stack_t {
-    void *data;
-    struct stack_t *next;
-};
-typedef struct stack_t stack;
+/* list_t is already a pointer */
+typedef list_t stack_t;
 
 /* @brief Allocate space for a new stack item.
  *
  * Allocate space for a new stack item and fill with NULL data. Users should
  * not be required to use this function directly, instead @see stack_new which
  * allocates space for new items. */
-inline stack* stack_new(void);
+inline stack_t stack_new(void);
 
 /* @brief Push new data to the stack
  *
@@ -68,7 +66,7 @@ inline stack* stack_new(void);
  *
  * @return The first stack item
  */
-inline stack* stack_push(void *data, stack* old);
+inline stack_t stack_push(void *data, stack_t old);
 
 /* @brief Remove the first entry
  *
@@ -80,11 +78,11 @@ inline stack* stack_push(void *data, stack* old);
  * 
  * @return The next stack item
  */
-inline stack* stack_pop(stack* old);
+inline stack_t stack_pop(stack_t old);
 
 /* @brief Return the data from the first item
  */
-inline void* stack_peek(stack *s);
+inline void* stack_peek(stack_t s);
 
 
 #endif /* end of include guard: STACK_H */

@@ -50,6 +50,8 @@ void *list_get_tail(list_t list)
 
 list_t list_pop_front(list_t list)
 {
+    if(list == NULL)
+	return NULL;
     list_t next = list->next;
     free(list);
     return next;

@@ -24,31 +24,22 @@
 */
 #include "stack.h"
 
-inline stack* stack_new(void)
+inline stack_t stack_new(void)
 {
-    stack *s = malloc(sizeof(stack));
-    s->data = NULL;
-    s->next = NULL;
-    return s;
+    return list_new(NULL);
 }
 
-inline stack* stack_push(void *data, stack* old)
+inline stack_t stack_push(void *data, stack_t old)
 {
-    stack *s = stack_new();
-    s->data = data;
-    s->next = old;
-    return s;
+    return list_push_front(old, data);
 }
 
-inline stack* stack_pop(stack* old)
+inline stack_t stack_pop(stack_t old)
 {
-    if(old == NULL) return NULL;
-    stack *s = old->next;
-    free(old);
-    return s;
+    return list_pop_front(old);
 }
 
-inline void* stack_peek(stack *s)
+inline void* stack_peek(stack_t s)
 {
-    return s->data;
+    return list_get_front(s);
 }

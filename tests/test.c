@@ -51,7 +51,7 @@ inline void counter_increase(void *a)
 
 void test_stack_create_new(void)
 {
-    stack *s = stack_new();
+    stack_t s = stack_new();
     assert_equal(s->next, NULL);
     assert_equal(s->data, NULL);
     free(s);
@@ -61,7 +61,7 @@ void test_stack_create_new(void)
 void test_stack_push_new(void)
 {
     int t = 5;
-    stack *s = stack_push("hello", NULL);
+    stack_t s = stack_push("hello", NULL);
 
     assert_equal(s->next, NULL);
     assert_string_equal(s->data, "hello");
@@ -76,7 +76,7 @@ void test_stack_push_new(void)
 /* Test with two items */
 void test_stack_push_one(void)
 {
-    stack *first, *second;
+    stack_t first, second;
     first = stack_push("world", NULL);
     second = stack_push("hello", first);
 
@@ -92,7 +92,7 @@ void test_stack_push_one(void)
 
 void test_stack_push_two(void)
 {
-    stack *first, *second, *third;
+    stack_t first, second, third;
     first = stack_push("world", NULL);
     second = stack_push("hello", first);
     third = stack_push("oh", second);
@@ -113,7 +113,7 @@ void test_stack_push_two(void)
 
 void test_stack_peek(void)
 {
-    stack *s = stack_push("hello", NULL);
+    stack_t s = stack_push("hello", NULL);
     assert_string_equal((char*)stack_peek(s), "hello");
 
     s = stack_push("world", s);
@@ -125,7 +125,7 @@ void test_stack_peek(void)
 
 void test_stack_pop(void)
 {
-    stack *s = stack_push("world", NULL);
+    stack_t s = stack_push("world", NULL);
     s = stack_push("hello", s);
 
     assert_string_equal((char*)stack_peek(s), "hello");
@@ -137,7 +137,7 @@ void test_stack_pop(void)
 
 void test_stack_pop_null(void)
 {
-    stack *s = stack_pop(NULL);
+    stack_t s = stack_pop(NULL);
     assert_equal(s, NULL);
 }
 
