@@ -756,7 +756,18 @@ void test_string_lev_other_size_0(void)
 
 void test_string_lev_other_size_0_uni(void)
 {
-    /* Test unicode */
+    assert_equal(levenshtein("", "äö"), 2);
+    assert_equal(levenshtein("fooäö", ""), 5);
+}
+
+void test_string_lev_same(void)
+{
+    assert_equal(levenshtein("same", "same"), 0);
+}
+
+void test_string_lev_same_uni(void)
+{
+    assert_equal(levenshtein("skändejä", "skändejä"), 0);
 }
 
 /* Suites */
@@ -845,6 +856,9 @@ TestSuite *string_suite()
     ADD(test_string_lev_dist_empty_strings);
     ADD(test_string_lev_dist_null_string);
     ADD(test_string_lev_other_size_0);
+    ADD(test_string_lev_other_size_0_uni);
+    ADD(test_string_lev_same);
+    ADD(test_string_lev_same_uni);
     return suite;
 }
 
