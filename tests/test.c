@@ -25,9 +25,11 @@
 #include <cgreen.h>
 #include <string.h>
 #include <assert.h>
+#include <locale.h>
 #include "../src/mstack.h"
 #include "../src/mheap.h"
 #include "../src/mlist.h"
+#include "../src/mstring.h"
 
 #define ADD(x) add_test(suite, x)
 
@@ -736,7 +738,25 @@ void test_list_at_out_range(void)
 
 void test_string_lev_dist_empty_strings(void)
 {
-    //assert_equal(levenshtein("", ""), 0);
+    assert_equal(levenshtein("", ""), 0);
+}
+
+void test_string_lev_dist_null_string(void)
+{
+    assert_equal(levenshtein(NULL, ""), -1);
+    assert_equal(levenshtein(NULL, NULL), -1);
+    assert_equal(levenshtein("", NULL), -1);
+}
+
+void test_string_lev_other_size_0(void)
+{
+    assert_equal(levenshtein("", "foo"), 3);
+    assert_equal(levenshtein("xyzzy", ""), 5);
+}
+
+void test_string_lev_other_size_0_uni(void)
+{
+    /* Test unicode */
 }
 
 /* Suites */
@@ -823,11 +843,14 @@ TestSuite *string_suite()
 {
     TestSuite *suite = create_test_suite();
     ADD(test_string_lev_dist_empty_strings);
+    ADD(test_string_lev_dist_null_string);
+    ADD(test_string_lev_other_size_0);
     return suite;
 }
 
 int main(int argc, const char *argv[])
 {
+    setlocale(LC_ALL, "");
     TestSuite *suite = create_test_suite();
     add_suite(suite, stack_suite());
     add_suite(suite, heap_suite());
