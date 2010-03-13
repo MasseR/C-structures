@@ -29,6 +29,12 @@
 #include "../src/mheap.h"
 #include "../src/mlist.h"
 
+#define ADD(x) add_test(suite, x)
+
+/* Helpers
+ * Stubs, counters etc
+ * */
+
 static int deletions;
 
 inline int heap_comp(void *a, void *b)
@@ -48,6 +54,8 @@ inline void counter_increase(void *a)
     if(a != NULL)
 	deletions++;
 }
+
+/* Tests */
 
 void test_stack_create_new(void)
 {
@@ -139,19 +147,6 @@ void test_stack_pop_null(void)
 {
     stack_t s = stack_pop(NULL);
     assert_equal(s, NULL);
-}
-
-TestSuite *stack_suite()
-{
-    TestSuite *suite = create_test_suite();
-    add_test(suite, test_stack_create_new);
-    add_test(suite, test_stack_push_new);
-    add_test(suite, test_stack_push_one);
-    add_test(suite, test_stack_push_two);
-    add_test(suite, test_stack_peek);
-    add_test(suite, test_stack_pop);
-    add_test(suite, test_stack_pop_null);
-    return suite;
 }
 
 void test_heap_new(void)
@@ -464,36 +459,6 @@ void test_heap_sort(void)
     free(array);
 }
 
-TestSuite *heap_suite()
-{
-    TestSuite *suite = create_test_suite();
-    add_test(suite, test_heap_new);
-    add_test(suite, test_heap_new_has_correct_size);
-    add_test(suite, test_heap_new_has_zero_nodes);
-    add_test(suite, test_heap_new_has_correct_cmp);
-    add_test(suite, test_heap_new_has_n_null_nodes);
-    add_test(suite, test_heap_insert_1);
-    add_test(suite, test_heap_insert_2);
-    add_test(suite, test_heap_insert_3);
-    add_test(suite, test_heap_insert_4);
-    add_test(suite, test_heap_insert_4_in_correct_order);
-    add_test(suite, test_heap_inserting_increases_nodes);
-    add_test(suite, test_heap_delete_size_1);
-    add_test(suite, test_heap_delete_size_2);
-    add_test(suite, test_heap_delete_size_3);
-    add_test(suite, test_heap_delete_size_4);
-    add_test(suite, test_heap_delete_size_5);
-    add_test(suite, test_heap_delete_from_right);
-    add_test(suite, test_heap_deleting_decreases_nodes);
-    add_test(suite, test_heap_insert_1_peek);
-    add_test(suite, test_heap_insert_2_peek);
-    add_test(suite, test_heap_set_delete_func);
-    add_test(suite, test_heap_remove_calls_exit);
-    add_test(suite, test_heap_free);
-    add_test(suite, test_heap_free_no_exit_func);
-    add_test(suite, test_heap_sort);
-    return suite;
-}
 
 void test_list_new(void)
 {
@@ -769,37 +734,95 @@ void test_list_at_out_range(void)
     assert_equal(list_at(list, 4), NULL);
 }
 
+void test_string_lev_dist_empty_strings(void)
+{
+    //assert_equal(levenshtein("", ""), 0);
+}
+
+/* Suites */
+
 TestSuite *list_suite()
 {
     TestSuite *suite = create_test_suite();
-    add_test(suite, test_list_new);
-    add_test(suite, test_list_new_has_data);
-    add_test(suite, test_list_new_next_is_null);
-    add_test(suite, test_list_push_front_with_null_creates_new);
-    add_test(suite, test_list_push_front_2);
-    add_test(suite, test_list_push_tail_with_null_creates_new);
-    add_test(suite, test_list_push_tail_2_inserts_end);
-    add_test(suite, test_list_push_tail_3_inserts_end);
-    add_test(suite, test_list_push_tail_4_inserts_end);
-    add_test(suite, test_list_push_front_size_0);
-    add_test(suite, test_list_push_front_size_1);
-    add_test(suite, test_list_push_front_size_2);
-    add_test(suite, test_list_push_front_size_3);
-    add_test(suite, test_list_get_front);
-    add_test(suite, test_list_get_tail);
-    add_test(suite, test_list_pop_front_1_returns_null);
-    add_test(suite, test_list_pop_front_2_returns_second);
-    add_test(suite, test_list_pop_tail_1_returns_null);
-    add_test(suite, test_list_pop_tail_2_returns_first);
-    add_test(suite, test_list_pop_tail_3_returns_first);
-    add_test(suite, test_list_foreach_size_1);
-    add_test(suite, test_list_foreach_size_2);
-    add_test(suite, test_list_foreach_size_3);
-    add_test(suite, test_list_foreach_no_callback);
-    add_test(suite, test_list_free_calls_foreach);
-    add_test(suite, test_list_free_does_not_calls_foreach);
-    add_test(suite, test_list_at_in_range);
-    add_test(suite, test_list_at_out_range);
+    ADD(test_list_new);
+    ADD(test_list_new_has_data);
+    ADD(test_list_new_next_is_null);
+    ADD(test_list_push_front_with_null_creates_new);
+    ADD(test_list_push_front_2);
+    ADD(test_list_push_tail_with_null_creates_new);
+    ADD(test_list_push_tail_2_inserts_end);
+    ADD(test_list_push_tail_3_inserts_end);
+    ADD(test_list_push_tail_4_inserts_end);
+    ADD(test_list_push_front_size_0);
+    ADD(test_list_push_front_size_1);
+    ADD(test_list_push_front_size_2);
+    ADD(test_list_push_front_size_3);
+    ADD(test_list_get_front);
+    ADD(test_list_get_tail);
+    ADD(test_list_pop_front_1_returns_null);
+    ADD(test_list_pop_front_2_returns_second);
+    ADD(test_list_pop_tail_1_returns_null);
+    ADD(test_list_pop_tail_2_returns_first);
+    ADD(test_list_pop_tail_3_returns_first);
+    ADD(test_list_foreach_size_1);
+    ADD(test_list_foreach_size_2);
+    ADD(test_list_foreach_size_3);
+    ADD(test_list_foreach_no_callback);
+    ADD(test_list_free_calls_foreach);
+    ADD(test_list_free_does_not_calls_foreach);
+    ADD(test_list_at_in_range);
+    ADD(test_list_at_out_range);
+    return suite;
+}
+
+TestSuite *stack_suite()
+{
+    TestSuite *suite = create_test_suite();
+    ADD(test_stack_create_new);
+    ADD(test_stack_push_new);
+    ADD(test_stack_push_one);
+    ADD(test_stack_push_two);
+    ADD(test_stack_peek);
+    ADD(test_stack_pop);
+    ADD(test_stack_pop_null);
+    return suite;
+}
+
+TestSuite *heap_suite()
+{
+    TestSuite *suite = create_test_suite();
+    ADD(test_heap_new);
+    ADD(test_heap_new_has_correct_size);
+    ADD(test_heap_new_has_zero_nodes);
+    ADD(test_heap_new_has_correct_cmp);
+    ADD(test_heap_new_has_n_null_nodes);
+    ADD(test_heap_insert_1);
+    ADD(test_heap_insert_2);
+    ADD(test_heap_insert_3);
+    ADD(test_heap_insert_4);
+    ADD(test_heap_insert_4_in_correct_order);
+    ADD(test_heap_inserting_increases_nodes);
+    ADD(test_heap_delete_size_1);
+    ADD(test_heap_delete_size_2);
+    ADD(test_heap_delete_size_3);
+    ADD(test_heap_delete_size_4);
+    ADD(test_heap_delete_size_5);
+    ADD(test_heap_delete_from_right);
+    ADD(test_heap_deleting_decreases_nodes);
+    ADD(test_heap_insert_1_peek);
+    ADD(test_heap_insert_2_peek);
+    ADD(test_heap_set_delete_func);
+    ADD(test_heap_remove_calls_exit);
+    ADD(test_heap_free);
+    ADD(test_heap_free_no_exit_func);
+    ADD(test_heap_sort);
+    return suite;
+}
+
+TestSuite *string_suite()
+{
+    TestSuite *suite = create_test_suite();
+    ADD(test_string_lev_dist_empty_strings);
     return suite;
 }
 
@@ -809,11 +832,13 @@ int main(int argc, const char *argv[])
     add_suite(suite, stack_suite());
     add_suite(suite, heap_suite());
     add_suite(suite, list_suite());
+    add_suite(suite, string_suite());
 
     if(argc > 1)
     {
         return run_single_test(suite, (char*)argv[1],
                 create_text_reporter());
     }
+
     return run_test_suite(suite, create_text_reporter());
 }
