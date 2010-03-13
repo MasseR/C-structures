@@ -1,1 +1,1 @@
-add_library(structures heap.c heap.h stack.c stack.h list.h list.c)
+add_library(structures mheap.c mheap.h mstack.c mstack.h mlist.h mlist.c)

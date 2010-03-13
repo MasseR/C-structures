@@ -39,7 +39,7 @@
 
 #define STACK_H
 #include <stdlib.h>
-#include "list.h"
+#include "mlist.h"
 
 /* list_t is already a pointer */
 typedef list_t stack_t;

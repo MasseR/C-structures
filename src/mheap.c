@@ -24,7 +24,7 @@
 */
 #include <string.h>
 #include <assert.h>
-#include "heap.h"
+#include "mheap.h"
 
 #define HEAP_SIZE sizeof(struct heap)
 #define LEFT(k) (2*((k)+1))-1

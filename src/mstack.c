@@ -22,7 +22,7 @@
  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  OTHER DEALINGS IN THE SOFTWARE.
 */
-#include "stack.h"
+#include "mstack.h"
 
 inline stack_t stack_new(void)
 {

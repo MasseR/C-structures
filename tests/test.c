@@ -25,9 +25,9 @@
 #include <cgreen.h>
 #include <string.h>
 #include <assert.h>
-#include "../src/stack.h"
-#include "../src/heap.h"
-#include "../src/list.h"
+#include "../src/mstack.h"
+#include "../src/mheap.h"
+#include "../src/mlist.h"
 
 static int deletions;
 
