@@ -770,6 +770,68 @@ void test_string_lev_same_uni(void)
     assert_equal(levenshtein("skändejä", "skändejä"), 0);
 }
 
+void test_string_lev_same_size_1(void)
+{
+    assert_equal(levenshtein("hello", "bello"), 1);
+    assert_equal(levenshtein("hello", "hallo"), 1);
+    assert_equal(levenshtein("hello", "hedlo"), 1);
+    assert_equal(levenshtein("hello", "heleo"), 1);
+    assert_equal(levenshtein("hello", "helle"), 1);
+}
+
+void test_string_lev_same_size_2(void)
+{
+    assert_equal(levenshtein("hello", "ballo"), 2);
+    assert_equal(levenshtein("hello", "harlo"), 2);
+    assert_equal(levenshtein("hello", "hedlr"), 2);
+    assert_equal(levenshtein("hello", "heler"), 2);
+    assert_equal(levenshtein("hello", "relle"), 2);
+}
+
+void test_string_lev_same_size_1_uni(void)
+{
+    assert_equal(levenshtein("hello", "äello"), 1);
+    assert_equal(levenshtein("hello", "hällo"), 1);
+    assert_equal(levenshtein("hello", "heälo"), 1);
+    assert_equal(levenshtein("hello", "heläo"), 1);
+    assert_equal(levenshtein("hello", "hellä"), 1);
+}
+
+void test_string_lev_same_size_2_uni(void)
+{
+    assert_equal(levenshtein("hello", "äöllo"), 2);
+    assert_equal(levenshtein("hello", "häölo"), 2);
+    assert_equal(levenshtein("hello", "heälö"), 2);
+    assert_equal(levenshtein("hello", "heläö"), 2);
+    assert_equal(levenshtein("hello", "äellö"), 2);
+}
+
+void test_string_lev_diff_size_1(void)
+{
+    assert_equal(levenshtein("hello", "helloo"), 1);
+    assert_equal(levenshtein("hhello", "hello"), 1);
+    assert_equal(levenshtein("gambo", "gambol"), 1);
+    assert_equal(levenshtein("lgambo", "gambo"), 1);
+}
+
+void test_string_lev_diff_size_1_uni(void)
+{
+    assert_equal(levenshtein("ähello", "hello"), 1);
+    assert_equal(levenshtein("hello", "helloä"), 1);
+}
+
+void test_string_lev_diff_size_and_content(void)
+{
+    assert_equal(levenshtein("ehelle", "hello"), 2);
+    assert_equal(levenshtein("hello", "ehelle"), 2);
+}
+
+void test_string_lev_diff_size_and_content_uni(void)
+{
+    assert_equal(levenshtein("ähellä", "hello"), 2);
+    assert_equal(levenshtein("hello", "ähellä"), 2);
+}
+
 /* Suites */
 
 TestSuite *list_suite()
@@ -859,6 +921,14 @@ TestSuite *string_suite()
     ADD(test_string_lev_other_size_0_uni);
     ADD(test_string_lev_same);
     ADD(test_string_lev_same_uni);
+    ADD(test_string_lev_same_size_1);
+    ADD(test_string_lev_same_size_2);
+    ADD(test_string_lev_same_size_1_uni);
+    ADD(test_string_lev_same_size_2_uni);
+    ADD(test_string_lev_diff_size_1);
+    ADD(test_string_lev_diff_size_1_uni);
+    ADD(test_string_lev_diff_size_and_content);
+    ADD(test_string_lev_diff_size_and_content_uni);
     return suite;
 }
 
