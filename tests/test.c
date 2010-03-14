@@ -934,7 +934,7 @@ TestSuite *string_suite()
 
 int main(int argc, const char *argv[])
 {
-    setlocale(LC_ALL, "");
+    setlocale(LC_ALL, "en_US.UTF-8");
     TestSuite *suite = create_test_suite();
     add_suite(suite, stack_suite());
     add_suite(suite, heap_suite());
