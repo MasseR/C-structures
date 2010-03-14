@@ -46,10 +46,10 @@ int levenshtein(const char *a, const char *b)
     if(a == NULL || b == NULL) return -1;
     if(strcmp(a, b) == 0) return 0;
 
-    unsigned int i, j;
-    size_t m, n, sizea, sizeb, sizetemp;
+    unsigned int i, j, cost, left, up, leftup;
+    size_t m, n, sizea, sizeb;
     mbstate_t *state = NULL;
-    wchar_t *wa = NULL, *wb = NULL, *wtemp = NULL;
+    wchar_t *wa = NULL, *wb = NULL;
 
     /* Convert to wide character */
     sizea = strlen(a);
@@ -71,17 +71,6 @@ int levenshtein(const char *a, const char *b)
 	return n;
     }
 
-    /* If the matrix would be wider, do it the other way around */
-    if(n < m)
-    {
-	sizetemp = m;
-	wtemp = wa;
-	m = n;
-	n = sizetemp;
-	wa = wb;
-	wb = wtemp;
-    }
-
     /* Create n*m matrix and set first column and row to 0..n */
     int matrix[n+1][m+1];
     for(i = 0; i <= n; i++)
@@ -98,11 +87,11 @@ int levenshtein(const char *a, const char *b)
     {
 	for(j = 1; j <= m; j++)
 	{
-	    int cost = COST(wa[i-1], wb[j-1]);
-	    int left = matrix[i-1][j] + 1;
-	    int right = matrix[i-1][j] + 1;
-	    int leftright = matrix[i-1][j-1] + cost;
-	    matrix[i][j] = min(left, right, leftright);
+	    cost = COST(wa[i-1], wb[j-1]);
+	    left = matrix[i-1][j] + 1;
+	    up = matrix[i][j-1] + 1;
+	    leftup = matrix[i-1][j-1] + cost;
+	    matrix[i][j] = min(left, up, leftup);
 	}
     }
 
