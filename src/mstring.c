@@ -26,7 +26,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <wchar.h>
-#include "mstring.h"
+#include "mlib/mstring.h"
 
 #define COST(a, b) ((a) == (b)) ? 0 : 1
 

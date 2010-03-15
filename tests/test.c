@@ -26,10 +26,7 @@
 #include <string.h>
 #include <assert.h>
 #include <locale.h>
-#include "../src/mstack.h"
-#include "../src/mheap.h"
-#include "../src/mlist.h"
-#include "../src/mstring.h"
+#include "../src/mlib.h"
 
 #define ADD(x) add_test(suite, x)
 
