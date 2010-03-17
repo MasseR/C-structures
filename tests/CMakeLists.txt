@@ -1,4 +1,4 @@
-add_executable(test test.c)
+add_executable(test test.c printer.c)
 
 link_directories(${C-structures}/src)
 
